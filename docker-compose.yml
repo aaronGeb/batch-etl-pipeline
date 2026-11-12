@@ -1,3 +1,19 @@
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.10.5
+  environment:
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:${AIRFLOW_DB_PASSWORD}@airflow-db:5432/airflow
+    AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY}
+    AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY}
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/plugins:/opt/airflow/plugins
+    - ./airflow/logs:/opt/airflow/logs
+  depends_on:
+    airflow-db:
+      condition: service_healthy
+
 services:
   warehouse:
     image: postgres:16
@@ -29,6 +45,16 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  airflow-init:
+    <<: *airflow-common
+    container_name: etl-airflow-init
+    command: >
+      bash -c "airflow db migrate &&
+      airflow users create
+      --username ${AIRFLOW_ADMIN_USER}
+      --password ${AIRFLOW_ADMIN_PASSWORD}
+      --firstname Admin --lastname User
+      --role Admin --email admin@example.com"
 
 volumes:
   warehouse_data:

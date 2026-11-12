@@ -221,3 +221,5 @@ __marimo__/
 .terraform/
 *.tfstate
 *.tfstate.*
+# airflow
+airflow/logs/

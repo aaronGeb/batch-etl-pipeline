@@ -8,6 +8,30 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: warehouse
+          POSTGRES_USER: etl
+          POSTGRES_PASSWORD: ci_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U etl -d warehouse"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      WAREHOUSE_DB: warehouse
+      WAREHOUSE_USER: etl
+      WAREHOUSE_PASSWORD: ci_password
+      DBT_HOST: localhost
+      DBT_PORT: "5432"
+      PGPASSWORD: ci_password
+
     steps:
       - uses: actions/checkout@v4
 
@@ -18,3 +42,14 @@ jobs:
 
       - name: Run unit tests
         run: uv run pytest -q
+
+      - name: Create raw table and load fixture rows
+        run: |
+          psql -h localhost -U etl -d warehouse -f sql/001_raw_fx_rates.sql
+          psql -h localhost -U etl -d warehouse -f sql/ci_seed.sql
+
+      - name: dbt run
+        run: uv run dbt run --project-dir dbt --profiles-dir dbt
+
+      - name: dbt test
+        run: uv run dbt test --project-dir dbt --profiles-dir dbt

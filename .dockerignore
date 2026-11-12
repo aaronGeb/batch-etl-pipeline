@@ -1,0 +1,6 @@
+.venv/
+.git/
+dbt/target/
+dbt/logs/
+airflow/logs/
+.env

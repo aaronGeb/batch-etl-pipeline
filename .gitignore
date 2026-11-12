@@ -222,4 +222,4 @@ __marimo__/
 *.tfstate
 *.tfstate.*
 # airflow
-airflow/logs/
+airflow/logs/dbt/.user.yml

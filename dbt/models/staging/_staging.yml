@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: stg_fx_rates
+    description: One row per day per currency pair, renamed from raw.fx_rates.
+    columns:
+      - name: rate_date
+        tests:
+          - not_null
+      - name: base_currency
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["USD"]
+      - name: quote_currency
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["EUR", "GBP", "CNY", "JPY"]
+      - name: rate
+        tests:
+          - not_null

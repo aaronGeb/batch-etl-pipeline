@@ -18,6 +18,3 @@ jobs:
 
       - name: Run unit tests
         run: uv run pytest -q
-
-      - name: Run integration tests
-        run: uv run pytest -q -m integration

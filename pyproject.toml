@@ -1,0 +1,16 @@
+[project]
+name = "batch-etl-pipeline"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "apache-airflow==3.3.1",
+    "boto3==1.43.79",
+    "dbt-core==1.11.11",
+    "dbt-postgres==1.10.0",
+    "pandas==3.0.3",
+    "psycopg2-binary==2.9.12",
+    "python-dotenv==1.2.3",
+    "requests==2.34.2",
+]

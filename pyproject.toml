@@ -17,6 +17,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "dbt-postgres>=1.10.0",
     "pytest>=9.2.0",
 ]
 

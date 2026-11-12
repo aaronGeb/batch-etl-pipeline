@@ -367,6 +367,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "dbt-postgres" },
     { name = "pytest" },
 ]
 
@@ -383,7 +384,10 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.2.0" }]
+dev = [
+    { name = "dbt-postgres", specifier = ">=1.10.0" },
+    { name = "pytest", specifier = ">=9.2.0" },
+]
 
 [[package]]
 name = "boto3"

@@ -1,10 +1,14 @@
 from datetime import datetime, timedelta
 
 from airflow.decorators import dag, task
+from airflow.operators.bash import BashOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 from fx_etl.extract import fetch_rates, flatten_rates
 from fx_etl.load import upsert_rates
+
+DBT = "/home/airflow/dbt_venv/bin/dbt"
+DBT_ARGS = "--project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt"
 
 
 @dag(
@@ -30,7 +34,17 @@ def fx_rates_daily():
         finally:
             conn.close()
 
-    load(extract())
+    dbt_run = BashOperator(
+        task_id="dbt_run",
+        bash_command=f"{DBT} run {DBT_ARGS}",
+    )
+
+    dbt_test = BashOperator(
+        task_id="dbt_test",
+        bash_command=f"{DBT} test {DBT_ARGS}",
+    )
+
+    load(extract()) >> dbt_run >> dbt_test
 
 
 fx_rates_daily()

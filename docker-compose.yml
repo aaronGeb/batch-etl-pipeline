@@ -15,6 +15,21 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  airflow-db:
+    image: postgres:16
+    container_name: etl-airflow-db
+    environment:
+      POSTGRES_DB: airflow
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: ${AIRFLOW_DB_PASSWORD}
+    volumes:
+      - airflow_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow -d airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   warehouse_data:
+  airflow_db_data:

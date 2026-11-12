@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: mart_fx_daily_change
+    description: Day-over-day percentage change in USD FX rates, measured against the previous business day.
+    columns:
+      - name: rate_date
+        tests:
+          - not_null
+      - name: quote_currency
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["EUR", "GBP", "CNY", "JPY"]
+      - name: rate
+        tests:
+          - not_null
+      - name: pct_change
+        description: Null only on the first date for each currency.

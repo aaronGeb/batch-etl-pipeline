@@ -11,12 +11,14 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ["USD"]
+              arguments:
+                values: ["USD"]
       - name: quote_currency
         tests:
           - not_null
           - accepted_values:
-              values: ["EUR", "GBP", "CNY", "JPY"]
+              arguments:
+                values: ["EUR", "GBP", "CNY", "JPY"]
       - name: rate
         tests:
           - not_null

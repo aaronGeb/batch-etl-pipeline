@@ -8,10 +8,18 @@ x-airflow-common: &airflow-common
     AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY}
     AIRFLOW__CORE__LOAD_EXAMPLES: "false"
     AIRFLOW_CONN_WAREHOUSE: postgresql://${WAREHOUSE_USER}:${WAREHOUSE_PASSWORD}@warehouse:5432/${WAREHOUSE_DB}
+    WAREHOUSE_USER: ${WAREHOUSE_USER}
+    WAREHOUSE_PASSWORD: ${WAREHOUSE_PASSWORD}
+    WAREHOUSE_DB: ${WAREHOUSE_DB}
+    DBT_HOST: warehouse
+    DBT_PORT: "5432"
+    DBT_TARGET_PATH: /tmp/dbt_target
+    DBT_LOG_PATH: /tmp/dbt_logs
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/plugins:/opt/airflow/plugins
     - ./airflow/logs:/opt/airflow/logs
+    - ./dbt:/opt/airflow/dbt
   depends_on:
     airflow-db:
       condition: service_healthy

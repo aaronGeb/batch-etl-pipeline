@@ -1,0 +1,11 @@
+name: fx_warehouse
+version: "1.0.0"
+profile: fx_warehouse
+model-paths: ["models"]
+
+models:
+  fx_warehouse:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
